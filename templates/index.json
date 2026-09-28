@@ -12,9 +12,32 @@
     "main": {
       "type": "hello-world",
       "settings": {}
+    },
+    "image_with_text_h3tf3r": {
+      "type": "image-with-text",
+      "name": "Custom Image with Text",
+      "settings": {
+        "image": "shopify://shop_images/823b2e2db69f79612c88c7e7a046442f5ceb2bf0.png",
+        "layout_width": "fixed",
+        "layout_direction": "normal",
+        "text_alignment": "left",
+        "subheading": "Trending Now",
+        "heading": "Handcrafted Premium Goods",
+        "text": "<p>Pair rich imagery with compelling stories to share insights into your brand history, values, or specific product lines.</p>",
+        "button_label": "Shop Collection",
+        "button_link": "",
+        "bg_color": "#ffffff",
+        "text_color": "#121212",
+        "accent_color": "#5a5a5a",
+        "btn_bg_color": "#121212",
+        "btn_text_color": "#ffffff",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "image_with_text_h3tf3r"
   ]
 }
