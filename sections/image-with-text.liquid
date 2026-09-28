@@ -1,0 +1,317 @@
+{% comment %}
+  Custom Image with Text Section
+  Fully responsive and customizable in the Theme Editor.
+{% endcomment %}
+
+<div class="custom-image-text__wrapper section-{{ section.id }}">
+  <div class="custom-image-text__container container-{{ section.settings.layout_width }} {% if section.settings.layout_direction == 'reversed' %}row-reverse{% endif %}">
+    
+    <!-- Image Column -->
+    <div class="custom-image-text__image-col">
+      {% if section.settings.image != blank %}
+        {{ section.settings.image | image_url: width: 800 | image_tag: 
+          loading: 'lazy', 
+          class: 'custom-image-text__img', 
+          alt: section.settings.image.alt | default: section.settings.heading 
+        }}
+      {% else %}
+        <!-- CodePen / Shopify Placeholder graphic if no image is uploaded -->
+        {{ 'image' | placeholder_svg_tag: 'custom-image-text__placeholder' }}
+      {% endif %}
+    </div>
+
+    <!-- Text/Content Column -->
+    <div class="custom-image-text__text-col text-align-{{ section.settings.text_alignment }}">
+      <div class="custom-image-text__content-inner">
+        {% if section.settings.subheading != blank %}
+          <span class="custom-image-text__subheading">{{ section.settings.subheading | escape }}</span>
+        {% endif %}
+        
+        {% if section.settings.heading != blank %}
+          <h2 class="custom-image-text__heading">{{ section.settings.heading | escape }}</h2>
+        {% endif %}
+        
+        {% if section.settings.text != blank %}
+          <div class="custom-image-text__description rte">
+            {{ section.settings.text }}
+          </div>
+        {% endif %}
+        
+        {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+          <a href="{{ section.settings.button_link }}" class="custom-image-text__btn">
+            {{ section.settings.button_label | escape }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% style %}
+  /* Section Padding & Scoped CSS Variables */
+  .section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    background-color: {{ section.settings.bg_color }};
+  }
+  
+  .section-{{ section.id }} .custom-image-text__heading {
+    color: {{ section.settings.text_color }};
+  }
+
+  .section-{{ section.id }} .custom-image-text__description {
+    color: {{ section.settings.text_color }};
+    opacity: 0.9;
+  }
+
+  /* Structural Styles (Flexbox Layout Like CodePen Demos) */
+  .custom-image-text__wrapper {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .custom-image-text__container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 40px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+
+  /* Width Configurations */
+  .container-full { max-width: 100%; }
+  .container-fixed { max-width: 1200px; }
+
+  .custom-image-text__image-col,
+  .custom-image-text__text-col {
+    flex: 1 1 calc(50% - 20px);
+    min-width: 320px;
+    box-sizing: border-box;
+  }
+
+  .custom-image-text__img, 
+  .custom-image-text__placeholder {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+    border-radius: 8px;
+  }
+
+  .custom-image-text__placeholder {
+    background-color: #f3f3f3;
+    fill: #999;
+    padding: 40px 0;
+  }
+
+  /* Content Formatting */
+  .custom-image-text__content-inner {
+    max-width: 550px;
+    margin: 0 auto;
+  }
+  
+  .text-align-left .custom-image-text__content-inner { margin-left: 0; text-align: left; }
+  .text-align-center .custom-image-text__content-inner { margin: 0 auto; text-align: center; }
+  .text-align-right .custom-image-text__content-inner { margin-right: 0; text-align: right; }
+
+  .custom-image-text__subheading {
+    display: block;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+    color: {{ section.settings.accent_color }};
+    font-weight: 600;
+  }
+
+  .custom-image-text__heading {
+    font-size: 32px;
+    margin: 0 0 16px 0;
+    line-height: 1.2;
+    font-weight: 700;
+  }
+
+  .custom-image-text__description {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  /* Interactive Button Styling */
+  .custom-image-text__btn {
+    display: inline-block;
+    padding: 12px 28px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    border-radius: 4px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    background-color: {{ section.settings.btn_bg_color }};
+    color: {{ section.settings.btn_text_color }};
+  }
+
+  .custom-image-text__btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+  }
+
+  /* Responsive Rules (Flips layout vertical on smaller viewports) */
+  @media (max-width: 768px) {
+    .custom-image-text__container {
+      flex-direction: column !important;
+      gap: 24px;
+    }
+    .custom-image-text__image-col,
+    .custom-image-text__text-col {
+      flex: 1 1 100%;
+    }
+    .custom-image-text__heading { font-size: 26px; }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Custom Image with Text",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "layout_width",
+      "label": "Section Width",
+      "options": [
+        { "value": "fixed", "label": "Grid/Boxed" },
+        { "value": "full", "label": "Full Width" }
+      ],
+      "default": "fixed"
+    },
+    {
+      "type": "select",
+      "id": "layout_direction",
+      "label": "Desktop Image Position",
+      "options": [
+        { "value": "normal", "label": "Left" },
+        { "value": "reversed", "label": "Right" }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Content Settings"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Trending Now"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Handcrafted Premium Goods"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Description",
+      "default": "<p>Pair rich imagery with compelling stories to share insights into your brand history, values, or specific product lines.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "Shop Collection"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Color Customizations"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent / Subheading Color",
+      "default": "#5a5a5a"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg_color",
+      "label": "Button Background",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "btn_text_color",
+      "label": "Button Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top Padding",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom Padding",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Image with Text"
+    }
+  ]
+}
+{% endschema %}
